@@ -1,0 +1,50 @@
+{
+  "warrior": {
+    "name": "Guerreiro", "desc": "Corpo a corpo, equilibrado", "color": "#4aa3ff",
+    "hp": 150, "energy": 100, "atk": 16, "def": 6, "speed": 230, "regen": 6,
+    "growth": {"hp": 14, "energy": 3, "atk": 2.2, "def": 0.8},
+    "reset": 0.7,
+    "combo": [
+      {"type": "melee", "dmg": 1.0, "range": 70, "dur": 0.30, "startup": 0.08, "kb": 120, "adv": 120},
+      {"type": "melee", "dmg": 1.1, "range": 75, "dur": 0.32, "startup": 0.09, "kb": 140, "adv": 120},
+      {"type": "melee", "dmg": 1.8, "range": 95, "dur": 0.50, "startup": 0.14, "kb": 380, "adv": 200, "launch": true}
+    ],
+    "skills": [
+      {"name": "Giro", "short": "GIRO", "type": "melee", "both": true, "dmg": 2.2, "range": 115, "cost": 25, "cd": 4, "dur": 0.45, "startup": 0.10, "kb": 300, "unlock": 1},
+      {"name": "Investida", "short": "INVES", "type": "dash", "dmg": 2.0, "dist": 340, "cost": 20, "cd": 5, "dur": 0.35, "kb": 350, "unlock": 3},
+      {"name": "Guarda", "short": "GUARDA", "type": "shield", "duration": 3.0, "cost": 30, "cd": 10, "unlock": 5}
+    ]
+  },
+  "archer": {
+    "name": "Arqueira", "desc": "Ataque à distância, mobilidade", "color": "#5ad36b",
+    "hp": 100, "energy": 100, "atk": 14, "def": 3, "speed": 270, "regen": 7,
+    "growth": {"hp": 9, "energy": 3, "atk": 2.0, "def": 0.5},
+    "reset": 0.6,
+    "combo": [
+      {"type": "projectile", "dmg": 0.9, "dur": 0.28, "startup": 0.07, "speed": 950, "kb": 60},
+      {"type": "projectile", "dmg": 0.9, "dur": 0.28, "startup": 0.07, "speed": 950, "kb": 60},
+      {"type": "projectile", "dmg": 0.8, "dur": 0.45, "startup": 0.12, "speed": 950, "count": 3, "spread": 0.14, "kb": 140}
+    ],
+    "skills": [
+      {"name": "Tiro Perfurante", "short": "PERFURA", "type": "projectile", "dmg": 2.6, "speed": 1250, "pierce": 99, "pw": 44, "ph": 10, "cost": 25, "cd": 4, "dur": 0.45, "startup": 0.20, "kb": 200, "unlock": 1},
+      {"name": "Chuva de Flechas", "short": "CHUVA", "type": "aoe", "ox": 260, "w": 300, "h": 260, "dmg": 2.6, "cost": 30, "cd": 7, "dur": 0.5, "startup": 0.35, "kb": 120, "unlock": 3},
+      {"name": "Recuo", "short": "RECUO", "type": "backstep", "dist": 280, "cost": 15, "cd": 5, "unlock": 5}
+    ]
+  },
+  "mage": {
+    "name": "Maga", "desc": "Magias, dano em área", "color": "#c07cff",
+    "hp": 90, "energy": 140, "atk": 15, "def": 2, "speed": 220, "regen": 12,
+    "growth": {"hp": 8, "energy": 5, "atk": 2.3, "def": 0.4},
+    "reset": 0.7,
+    "combo": [
+      {"type": "projectile", "dmg": 1.0, "dur": 0.34, "startup": 0.10, "speed": 700, "pw": 22, "ph": 22, "kb": 70},
+      {"type": "projectile", "dmg": 1.0, "dur": 0.34, "startup": 0.10, "speed": 700, "pw": 22, "ph": 22, "kb": 70},
+      {"type": "projectile", "dmg": 1.5, "dur": 0.60, "startup": 0.20, "speed": 600, "pw": 34, "ph": 34, "radius": 90, "kb": 300}
+    ],
+    "skills": [
+      {"name": "Bola de Fogo", "short": "FOGO", "type": "projectile", "dmg": 2.6, "speed": 650, "pw": 40, "ph": 40, "radius": 100, "cost": 25, "cd": 4, "dur": 0.5, "startup": 0.20, "kb": 250, "unlock": 1},
+      {"name": "Explosão", "short": "EXPLO", "type": "aoe", "ox": 150, "w": 320, "h": 220, "dmg": 3.2, "cost": 35, "cd": 8, "dur": 0.6, "startup": 0.45, "kb": 300, "unlock": 3},
+      {"name": "Barreira", "short": "BARREIRA", "type": "shield", "duration": 4.0, "cost": 30, "cd": 12, "unlock": 5}
+    ]
+  }
+}
