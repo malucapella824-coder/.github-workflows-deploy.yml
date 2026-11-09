@@ -22,7 +22,7 @@ image: barichello/godot-ci:4.3
 steps:
 - name: Baixar o projeto
 uses: actions/checkout@v4
-
+                         
 - name: Preparar modelos de exportação
   run: |
   mkdir -v -p ~/.local/share/godot/export_templates/
