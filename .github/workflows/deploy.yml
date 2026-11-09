@@ -25,24 +25,19 @@ jobs:
 
       - name: Preparar modelos de exportação
         run: |
-          echo "GODOT_VERSION=${GODOT_VERSION} HOME=${HOME}"
-          DEST="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
-          mkdir -p "$HOME/.local/share/godot/export_templates"
-          SRC=""
-          for d in /root/.local/share/godot/export_templates/*stable* /root/.local/share/godot/templates/*stable*; do
-            if [ -d "$d" ]; then SRC="$d"; break; fi
-          done
-          echo "Modelos encontrados em: $SRC"
-          if [ -z "$SRC" ]; then
-            echo "Nenhuma pasta de modelos encontrada. Conteúdo de /root/.local/share/godot:"
-            ls -R /root/.local/share/godot | head -50
-            exit 1
+          DEST="$HOME/.local/share/godot/export_templates/4.3.stable"
+          mkdir -p "$DEST"
+          FOUND=$(find /root /opt /usr /home /github -name web_nothreads_release.zip 2>/dev/null | head -n 1)
+          if [ -n "$FOUND" ]; then
+            echo "Modelo Web encontrado em: $FOUND"
+            cp -r "$(dirname "$FOUND")"/. "$DEST"/
+          else
+            echo "Modelo Web não está na imagem. Baixando os modelos oficiais do Godot 4.3..."
+            wget -q -O /tmp/templates.tpz https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_export_templates.tpz
+            unzip -o -j /tmp/templates.tpz "templates/web_nothreads_*" "templates/version.txt" -d "$DEST"
           fi
-          if [ "$SRC" != "$DEST" ]; then
-            rm -rf "$DEST"
-            cp -r "$SRC" "$DEST"
-          fi
-          ls "$DEST" | head -20
+          ls -la "$DEST"
+          test -f "$DEST/web_nothreads_release.zip"
 
       - name: Importar projeto
         run: godot --headless --import || true
