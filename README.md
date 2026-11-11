@@ -3,7 +3,7 @@
 Jogo de ação 2D offline feito em Godot 4.3. Esta pasta já está pronta para o GitHub Pages:
 a cada envio para a branch `main`, o GitHub exporta o jogo sozinho e publica o site.
 
-## Publicar (versão com todos os arquivos na raiz, sem pastas)
+## Publicar
 1. Crie um repositório novo no GitHub (pode ser público).
 2. Envie TODOS os arquivos desta pasta, incluindo a pasta oculta `.github`.
 3. No repositório: Settings > Pages > Source: escolha **GitHub Actions**.
