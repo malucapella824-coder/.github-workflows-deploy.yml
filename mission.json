@@ -1,5 +1,5 @@
 {
- "name": "Floresta Sombria (Mini)",
+ "name": "Floresta Sombria",
  "grade_multiplier": {
   "S": 1.5,
   "A": 1.25,
@@ -44,7 +44,8 @@
      "goblin_archer",
      "bat"
     ]
-   ]
+   ],
+   "theme": "forest"
   },
   {
    "name": "Sala 2 - Clareira",
@@ -81,9 +82,56 @@
     ],
     [
      "bat",
+     "bat",
      "boar"
+    ],
+    [
+     "ogre"
     ]
-   ]
+   ],
+   "theme": "twilight"
+  },
+  {
+   "name": "Sala 3 - Cavernas",
+   "bg": "#2a1b1b",
+   "plat": "#9a6a4a",
+   "ground": "#5a3a30",
+   "platforms": [
+    [
+     250,
+     500,
+     260
+    ],
+    [
+     750,
+     430,
+     260
+    ],
+    [
+     1250,
+     500,
+     260
+    ],
+    [
+     1750,
+     430,
+     260
+    ]
+   ],
+   "waves": [
+    [
+     "ogre",
+     "bat",
+     "goblin_archer"
+    ],
+    [
+     "boar",
+     "boar",
+     "slime",
+     "bat"
+    ]
+   ],
+   "theme": "cave"
   },
   {
    "name": "Covil do Dragão",
@@ -107,7 +155,8 @@
      220
     ]
    ],
-   "boss": "dragon"
+   "boss": "dragon",
+   "theme": "lava"
   }
  ]
 }

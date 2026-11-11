@@ -11,10 +11,10 @@ var mission: Dictionary = {}
 var save: Dictionary = {}
 
 func _ready() -> void:
-	classes = _load_json("res://classes.json")
-	monsters = _load_json("res://monsters.json")
-	items = _load_json("res://items.json")
-	mission = _load_json("res://mission.json")
+	classes = _load_json("res://data/classes.json")
+	monsters = _load_json("res://data/monsters.json")
+	items = _load_json("res://data/items.json")
+	mission = _load_json("res://data/mission.json")
 	load_save()
 
 func _load_json(path: String) -> Dictionary:

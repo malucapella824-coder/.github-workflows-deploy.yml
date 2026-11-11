@@ -34,6 +34,13 @@ var warn: ColorRect
 var eye: ColorRect
 var bar_bg: ColorRect
 var bar: ColorRect
+# Arte dos monstros (opcional: usa mob_<id>.png se existir)
+const MOB_ART = {"slime": 1.3, "bat": 2.0, "goblin_archer": 1.2, "boar": 1.25, "ogre": 1.16, "dragon": 1.27}
+var has_art := false
+var spr: Sprite2D
+var spr_base := 1.0
+var spr_y := 0.0
+var spr_vis_h := 1.0
 
 func setup(main_ref, monster_id: String, data: Dictionary, pos: Vector2) -> void:
 	main = main_ref
@@ -75,6 +82,7 @@ func setup(main_ref, monster_id: String, data: Dictionary, pos: Vector2) -> void
 	eye.color = Color(1, 1, 1)
 	eye.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(eye)
+	_build_art()
 	bar_bg = ColorRect.new()
 	bar_bg.size = Vector2(size.x, 5)
 	bar_bg.position = Vector2(-size.x / 2.0, -size.y / 2.0 - 12.0)
@@ -90,6 +98,59 @@ func setup(main_ref, monster_id: String, data: Dictionary, pos: Vector2) -> void
 	bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(bar)
 	add_to_group("enemies")
+
+func _build_art() -> void:
+	var path := "res://mob_%s.png" % id
+	if not MOB_ART.has(id) or not ResourceLoader.exists(path):
+		return
+	var tex: Texture2D = load(path)
+	has_art = true
+	body.visible = false
+	eye.visible = false
+	spr = Sprite2D.new()
+	spr.texture = tex
+	spr_base = size.y * float(MOB_ART[id]) / float(tex.get_height())
+	spr_base = maxf(1.0, roundf(spr_base))   # pixel art: escala inteira = pixels nítidos
+	spr.scale = Vector2(spr_base, spr_base)
+	spr_vis_h = float(tex.get_height()) * spr_base
+	spr_y = 0.0 if flying else (size.y - spr_vis_h) / 2.0
+	spr.position = Vector2(0.0, spr_y)
+	add_child(spr)
+
+func _update_art(blink: bool) -> void:
+	var t := Time.get_ticks_msec() / 1000.0
+	spr.flip_h = facing < 0
+	var sx := 1.0
+	var sy := 1.0
+	var bob := 0.0
+	var tint := Color(1, 1, 1)
+	if flash_t > 0.0:
+		tint = Color(1.0, 0.55, 0.55)
+		sx = 1.08
+		sy = 0.94
+	elif state == "windup":
+		var k := 1.0 - clampf(state_t / maxf(0.01, float(cur.get("windup", 0.5))), 0.0, 1.0)
+		sy = 1.0 - 0.10 * k
+		sx = 1.0 + 0.08 * k
+		tint = Color(1.0, 0.85, 0.45)
+	elif state == "recover" or state == "stunned":
+		tint = Color(0.65, 0.65, 0.78)
+	elif state == "active":
+		sx = 1.12
+		sy = 0.92
+	elif flying:
+		bob = sin(t * 8.0) * 4.0
+		sy = 1.0 + sin(t * 16.0) * 0.08
+	elif absf(velocity.x) > 10.0:
+		bob = -absf(sin(t * 9.0)) * 3.0
+		sy = 1.0 + sin(t * 9.0) * 0.03
+	else:
+		sy = 1.0 + sin(t * 3.0) * 0.02
+	tint.a = 0.4 if blink else 1.0
+	spr.modulate = tint
+	spr.scale = Vector2(spr_base * sx, spr_base * sy)
+	var keep := 0.0 if flying else (1.0 - sy) * spr_vis_h / 2.0
+	spr.position = Vector2(0.0, spr_y + bob + keep)
 
 func get_rect() -> Rect2:
 	return Rect2(global_position - size / 2.0, size)
@@ -237,7 +298,7 @@ func _execute() -> void:
 			var aim: Vector2 = (p.global_position - global_position).normalized()
 			for i in cnt:
 				var ang := (i - (cnt - 1) / 2.0) * spread
-				var pr := preload("res://projectile.gd").new()
+				var pr := preload("res://scripts/projectile.gd").new()
 				pr.main = main
 				pr.team = "enemy"
 				pr.vel = aim.rotated(ang) * float(cur.speed)
@@ -309,6 +370,8 @@ func take_hit(dmg: float, dir: float, kb: float, crit: bool, launch) -> void:
 	hp -= dmg
 	flash_t = 0.08
 	main.register_hit()
+	main.spawn_sparks(global_position + Vector2(0, -size.y / 4.0), Color(0.72, 0.06, 0.1), 14 if crit else 8)
+	main.spawn_sparks(global_position + Vector2(0, -size.y / 4.0), Color(1.0, 0.85, 0.5), 5 if crit else 2, 300.0)
 	main.spawn_text(global_position + Vector2(0, -size.y / 2.0 - 10.0), str(int(dmg)), Color(1, 0.85, 0.2) if crit else Color.WHITE, 30 if crit else 22)
 	if not armor and not is_boss:
 		velocity.x = dir * kb
@@ -345,6 +408,8 @@ func _update_visual() -> void:
 	eye.position = Vector2(size.x * 0.15 if facing > 0 else -size.x * 0.15 - eye.size.x, -size.y * 0.25)
 	var blink := spawn_invuln > 0.0 and int(Time.get_ticks_msec() / 80) % 2 == 0
 	body.modulate.a = 0.4 if blink else 1.0
+	if has_art:
+		_update_art(blink)
 	if not is_boss and hp < max_hp:
 		bar_bg.visible = true
 		bar.visible = true
